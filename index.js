@@ -66,13 +66,26 @@ async function run() {
       res.send(result);
     });
 
-    app.delete('/bookings/:id', async(req, res)=>{
+    app.patch("/bookings/:id", async (req, res) => {
       const id = req.params.id;
-      const query = {_id: new ObjectId(id)};
-      const result = await BookingCollection.deleteOne(query)
+      const filter = { _id: new ObjectId(id) };
+      const updateBooking = req.body;
+      // console.log(updateBooking);
+      const updateDoc = {
+        $set: {
+          status: updateBooking.status,
+        },
+      };
+      const result = await BookingCollection.updateOne(filter,updateDoc);
       res.send(result);
-    })
+    });
 
+    app.delete("/bookings/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await BookingCollection.deleteOne(query);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
