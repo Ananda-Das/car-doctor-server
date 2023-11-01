@@ -80,6 +80,13 @@ async function run() {
         .send({ success: true });
     });
 
+    //for logout
+    app.post('/logout', async(req, res)=>{
+      const user = req.body;
+      console.log('logging out', user);
+      res.clearCookie('token',{maxAge: 0}).send({success:true})
+    })
+
     //services
     app.get("/services", logger, async (req, res) => {
       const cursor = serviceCollection.find();
